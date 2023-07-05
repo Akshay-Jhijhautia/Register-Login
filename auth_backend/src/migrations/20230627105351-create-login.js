@@ -29,6 +29,14 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: true,
       },
+      city: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
+      pincode: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
       phoneNumber: {
         type: Sequelize.STRING,
         allowNull: true,
