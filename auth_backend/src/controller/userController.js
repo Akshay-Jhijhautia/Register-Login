@@ -32,6 +32,8 @@ async function updateDetails(req, res) {
       address: req.body.address,
       phoneNumber: req.body.phoneNumber,
       gender: req.body.gender,
+      city: req.body.city,
+      pincode: req.body.pincode,
     });
     SuccessResponse.data = user;
     return res.status(StatusCodes.CREATED).json(SuccessResponse);

@@ -23,11 +23,11 @@ export const userSchema = yup.object().shape({
   city: yup.string().required("City is required"),
   pincode: yup
     .string()
-    .matches(/^[0-9]{6}$/, "Invalid Pincode")
+    .matches(/^[0-9]{5}$/, "Invalid Pincode")
     .required("Pin Code is required"),
   phoneNumber: yup
     .string()
-    .matches(/^[6-9][0-9]{9}$/, "Invalid Phone Number")
+    .matches(/^[6-9][0-9]{8}$/, "Invalid Phone Number")
     .required("Phone Number"),
   gender: yup.string().required("Gender is Required"),
 });
