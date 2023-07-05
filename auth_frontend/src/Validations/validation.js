@@ -1,9 +1,10 @@
-import * as Yup from "yup";
+import * as yup from "yup";
 
-export const signUpSchema = Yup.object({
-  name: Yup.string().required("Name is required"),
-  email: Yup.string()
+export const signUpSchema = yup.object().shape({
+  name: yup.string().required("Name is required"),
+  email: yup
+    .string()
     .email("Invalid Email Address")
     .required("Email is required"),
-  password: Yup.string().required("Password is required"),
+  password: yup.string().required("Password is required"),
 });

@@ -15,12 +15,16 @@ import apiClient from "../services/api-client";
 import { signUpSchema } from "../Validations/validation";
 
 const SignUp = () => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [nameError, setNameError] = useState("");
-  const [emailError, setEmailError] = useState("");
-  const [passwordError, setPasswordError] = useState("");
+  const [values, setValues] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
+  const [errors, setErrors] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
   const [networkError, setNetworkError] = useState(false);
   const [checkDuplicateEmail, setCheckDupllicateEmail] = useState(false);
   const [checkSignUpSuccess, setCheckSignUpSuccess] = useState(false);
@@ -30,9 +34,9 @@ const SignUp = () => {
 
     apiClient
       .post("signup", {
-        name: name,
-        email: email,
-        password: password,
+        name: values.name,
+        email: values.email,
+        password: values.password,
       })
       .then((res) => {
         setCheckSignUpSuccess(true);
@@ -55,19 +59,76 @@ const SignUp = () => {
     setNetworkError(false);
   }
 
-  function handleName(event) {
-    setNameError("");
-    setName(event.target.value);
+  async function handleNameChange(event) {
+    setValues({
+      ...values,
+      name: event.target.value,
+    });
+    try {
+      await signUpSchema.validateAt("name", { name: values.name });
+      setErrors({ ...errors, name: "" });
+    } catch (error) {
+      setErrors({ ...errors, name: error.message });
+    }
   }
 
-  function handleEmail(event) {
-    setEmailError("");
-    setEmail(event.target.value);
+  async function handleEmailChange(event) {
+    setValues({
+      ...values,
+      email: event.target.value,
+    });
+    try {
+      await signUpSchema.validateAt("email", { email: values.email });
+      setErrors({ ...errors, email: "" });
+    } catch (error) {
+      setErrors({ ...errors, email: error.message });
+    }
   }
 
-  function handlePassword(event) {
-    setPasswordError("");
-    setPassword(event.target.value);
+  async function handlePasswordChange(event) {
+    setValues({
+      ...values,
+      password: event.target.value,
+    });
+    try {
+      await signUpSchema.validateAt("password", { password: values.password });
+      setErrors({ ...errors, password: "" });
+    } catch (error) {
+      setErrors({ ...errors, password: error.message });
+    }
+  }
+
+  async function handleNameError() {
+    try {
+      await signUpSchema.validateAt("name", {
+        name: values.name,
+      });
+      setErrors({ ...errors, name: "" });
+    } catch (error) {
+      setErrors({ ...errors, name: error.message });
+    }
+  }
+
+  async function handleEmailError() {
+    try {
+      await signUpSchema.validateAt("email", {
+        email: values.email,
+      });
+      setErrors({ ...errors, email: "" });
+    } catch (error) {
+      setErrors({ ...errors, email: error.message });
+    }
+  }
+
+  async function handlePasswordError() {
+    try {
+      await signUpSchema.validateAt("password", {
+        password: values.password,
+      });
+      setErrors({ ...errors, password: "" });
+    } catch (error) {
+      setErrors({ ...errors, password: error.message });
+    }
   }
 
   return (
@@ -111,42 +172,43 @@ const SignUp = () => {
             style={{ display: "flex", flexDirection: "column", rowGap: "25px" }}
           >
             <TextField
-              required
-              value={name}
-              onChange={handleName}
-              onFocus={() => setNameError("Name is required")}
+              value={values.name}
+              onChange={handleNameChange}
+              onFocus={handleNameError}
               label="name"
               variant="outlined"
-              error={nameError ? true : false}
-              helperText={nameError}
+              error={errors.name ? true : false}
+              helperText={errors.name}
               type="text"
             />
 
             <TextField
               required
-              value={email}
-              onChange={handleEmail}
-              onFocus={() => setEmailError("Email is required")}
+              value={values.email}
+              onChange={handleEmailChange}
+              onFocus={handleEmailError}
               label="email@email.com"
               variant="outlined"
-              error={emailError ? true : false}
-              helperText={emailError}
+              error={errors.email ? true : false}
+              helperText={errors.email}
               type="email"
             />
             <TextField
               required
-              value={password}
-              onChange={handlePassword}
-              onFocus={() => setPasswordError("Password is required")}
+              value={values.password}
+              onChange={handlePasswordChange}
+              onFocus={handlePasswordError}
               label="password123"
               variant="outlined"
-              error={passwordError ? true : false}
-              helperText={passwordError}
+              error={errors.password ? true : false}
+              helperText={errors.password}
               type="password"
             />
 
             <Button
-              disabled={nameError || emailError || passwordError ? true : false}
+              disabled={
+                errors.name || errors.email || errors.password ? true : false
+              }
               variant="contained"
               color="primary"
               sx={{ width: "30%" }}
