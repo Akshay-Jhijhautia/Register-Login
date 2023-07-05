@@ -94,28 +94,6 @@ const Login = () => {
     }
   }
 
-  async function handleEmailError() {
-    try {
-      await loginSchema.validateAt("email", {
-        email: values.email,
-      });
-      setErrors({ ...errors, email: "" });
-    } catch (error) {
-      setErrors({ ...errors, email: error.message });
-    }
-  }
-
-  async function handlePasswordError() {
-    try {
-      await loginSchema.validateAt("password", {
-        password: values.password,
-      });
-      setErrors({ ...errors, password: "" });
-    } catch (error) {
-      setErrors({ ...errors, password: error.message });
-    }
-  }
-
   return (
     <>
       <Snackbar open={success} autoHideDuration={6000} onClose={successClose}>
@@ -170,7 +148,6 @@ const Login = () => {
               required
               value={values.email}
               onChange={handleEmailChange}
-              onFocus={handleEmailError}
               label="Email"
               variant="outlined"
               error={errors.email ? true : false}
@@ -181,7 +158,6 @@ const Login = () => {
               required
               value={values.password}
               onChange={handlePasswordChange}
-              onFocus={handlePasswordError}
               label="Password"
               variant="outlined"
               error={errors.password ? true : false}

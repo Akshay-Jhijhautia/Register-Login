@@ -98,39 +98,6 @@ const SignUp = () => {
     }
   }
 
-  async function handleNameError() {
-    try {
-      await signUpSchema.validateAt("name", {
-        name: values.name,
-      });
-      setErrors({ ...errors, name: "" });
-    } catch (error) {
-      setErrors({ ...errors, name: error.message });
-    }
-  }
-
-  async function handleEmailError() {
-    try {
-      await signUpSchema.validateAt("email", {
-        email: values.email,
-      });
-      setErrors({ ...errors, email: "" });
-    } catch (error) {
-      setErrors({ ...errors, email: error.message });
-    }
-  }
-
-  async function handlePasswordError() {
-    try {
-      await signUpSchema.validateAt("password", {
-        password: values.password,
-      });
-      setErrors({ ...errors, password: "" });
-    } catch (error) {
-      setErrors({ ...errors, password: error.message });
-    }
-  }
-
   return (
     <>
       <Snackbar
@@ -175,7 +142,6 @@ const SignUp = () => {
               required
               value={values.name}
               onChange={handleNameChange}
-              onFocus={handleNameError}
               label="Name"
               variant="outlined"
               error={errors.name ? true : false}
@@ -187,7 +153,6 @@ const SignUp = () => {
               required
               value={values.email}
               onChange={handleEmailChange}
-              onFocus={handleEmailError}
               label="Email"
               variant="outlined"
               error={errors.email ? true : false}
@@ -198,7 +163,6 @@ const SignUp = () => {
               required
               value={values.password}
               onChange={handlePasswordChange}
-              onFocus={handlePasswordError}
               label="Password"
               variant="outlined"
               error={errors.password ? true : false}
