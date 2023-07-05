@@ -12,6 +12,7 @@ import { Navigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 
 import apiClient from "../services/api-client";
+import { signUpSchema } from "../Validations/validation";
 
 const SignUp = () => {
   const [name, setName] = useState("");
@@ -118,6 +119,7 @@ const SignUp = () => {
               variant="outlined"
               error={nameError ? true : false}
               helperText={nameError}
+              type="text"
             />
 
             <TextField
@@ -129,6 +131,7 @@ const SignUp = () => {
               variant="outlined"
               error={emailError ? true : false}
               helperText={emailError}
+              type="email"
             />
             <TextField
               required
@@ -139,6 +142,7 @@ const SignUp = () => {
               variant="outlined"
               error={passwordError ? true : false}
               helperText={passwordError}
+              type="password"
             />
 
             <Button
