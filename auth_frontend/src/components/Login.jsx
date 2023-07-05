@@ -13,10 +13,19 @@ import { Link } from "react-router-dom";
 import Cookies from "js-cookie";
 
 import apiClient from "../services/api-client";
+import { loginSchema } from "../Validations/validation";
 
 const Login = () => {
-  const emailRef = useRef(null);
-  const passwordRef = useRef(null);
+  const [values, setValues] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
+  const [errors, setErrors] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
   const [networkError, setNetworkError] = useState(false);
   const [emailError, setEmailError] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -26,8 +35,8 @@ const Login = () => {
     event.preventDefault();
     apiClient
       .post("login", {
-        email: emailRef.current.value,
-        password: passwordRef.current.value,
+        email: values.email,
+        password: values.password,
       })
       .then((res) => {
         setSuccess(true);
@@ -57,6 +66,54 @@ const Login = () => {
   function emailErrorClose() {
     setEmailError(false);
     setNetworkError(false);
+  }
+
+  async function handleEmailChange(event) {
+    setValues({
+      ...values,
+      email: event.target.value,
+    });
+    try {
+      await loginSchema.validateAt("email", { email: values.email });
+      setErrors({ ...errors, email: "" });
+    } catch (error) {
+      setErrors({ ...errors, email: error.message });
+    }
+  }
+
+  async function handlePasswordChange(event) {
+    setValues({
+      ...values,
+      password: event.target.value,
+    });
+    try {
+      await loginSchema.validateAt("password", { password: values.password });
+      setErrors({ ...errors, password: "" });
+    } catch (error) {
+      setErrors({ ...errors, password: error.message });
+    }
+  }
+
+  async function handleEmailError() {
+    try {
+      await loginSchema.validateAt("email", {
+        email: values.email,
+      });
+      setErrors({ ...errors, email: "" });
+    } catch (error) {
+      setErrors({ ...errors, email: error.message });
+    }
+  }
+
+  async function handlePasswordError() {
+    try {
+      await loginSchema.validateAt("password", {
+        password: values.password,
+      });
+      setErrors({ ...errors, password: "" });
+    } catch (error) {
+      setErrors({ ...errors, password: error.message });
+    }
   }
 
   return (
@@ -105,29 +162,45 @@ const Login = () => {
           <Typography variant="h6" align="left" gutterBottom>
             Please Enter Your Login Credentials
           </Typography>
-          <form
+          <Box
+            component="form"
             style={{ display: "flex", flexDirection: "column", rowGap: "25px" }}
-            onSubmit={loginData}
           >
             <TextField
               required
-              inputRef={emailRef}
-              label="email@email.com"
+              value={values.email}
+              onChange={handleEmailChange}
+              onFocus={handleEmailError}
+              label="Email"
               variant="outlined"
+              error={errors.email ? true : false}
+              helperText={errors.email}
               type="email"
             />
             <TextField
               required
-              inputRef={passwordRef}
-              label="password123"
+              value={values.password}
+              onChange={handlePasswordChange}
+              onFocus={handlePasswordError}
+              label="Password"
               variant="outlined"
+              error={errors.password ? true : false}
+              helperText={errors.password}
               type="password"
             />
             <Button
+              disabled={
+                values.email.length === 0 ||
+                values.password.length === 0 ||
+                errors.email ||
+                errors.password
+                  ? true
+                  : false
+              }
               variant="contained"
               color="primary"
               sx={{ width: "30%" }}
-              type="submit"
+              onClick={loginData}
             >
               Login
               {loginSuccess && <Navigate to={"/users"}></Navigate>}
@@ -136,7 +209,7 @@ const Login = () => {
             <Link to={"/signup"}>
               <Typography>Account Does Not Exist? Sign Up</Typography>
             </Link>
-          </form>
+          </Box>
         </Box>
       </Container>
     </>

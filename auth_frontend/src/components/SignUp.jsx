@@ -172,10 +172,11 @@ const SignUp = () => {
             style={{ display: "flex", flexDirection: "column", rowGap: "25px" }}
           >
             <TextField
+              required
               value={values.name}
               onChange={handleNameChange}
               onFocus={handleNameError}
-              label="name"
+              label="Name"
               variant="outlined"
               error={errors.name ? true : false}
               helperText={errors.name}
@@ -187,7 +188,7 @@ const SignUp = () => {
               value={values.email}
               onChange={handleEmailChange}
               onFocus={handleEmailError}
-              label="email@email.com"
+              label="Email"
               variant="outlined"
               error={errors.email ? true : false}
               helperText={errors.email}
@@ -198,7 +199,7 @@ const SignUp = () => {
               value={values.password}
               onChange={handlePasswordChange}
               onFocus={handlePasswordError}
-              label="password123"
+              label="Password"
               variant="outlined"
               error={errors.password ? true : false}
               helperText={errors.password}
@@ -207,7 +208,14 @@ const SignUp = () => {
 
             <Button
               disabled={
-                errors.name || errors.email || errors.password ? true : false
+                values.name.length === 0 ||
+                values.email.length === 0 ||
+                values.password.length === 0 ||
+                errors.name ||
+                errors.email ||
+                errors.password
+                  ? true
+                  : false
               }
               variant="contained"
               color="primary"
