@@ -1,12 +1,18 @@
 import * as yup from "yup";
 
 export const signUpSchema = yup.object().shape({
-  name: yup.string().required("Name is required"),
+  name: yup
+    .string()
+    .min(3, "Name Should be Minimum 3 Characters")
+    .required("Name is required"),
   email: yup
     .string()
     .email("Invalid Email Address")
     .required("Email is required"),
-  password: yup.string().required("Password is required"),
+  password: yup
+    .string()
+    .min(6, "Password Should be Minimum 6 Characters")
+    .required("Password is required"),
 });
 
 export const loginSchema = yup.object().shape({
@@ -14,11 +20,17 @@ export const loginSchema = yup.object().shape({
     .string()
     .email("Invalid Email Address")
     .required("Email is required"),
-  password: yup.string().required("Password is required"),
+  password: yup
+    .string()
+    .min(6, "Password Should be Minimum 6 Characters")
+    .required("Password is required"),
 });
 
 export const userSchema = yup.object().shape({
-  name: yup.string().required("Name is required"),
+  name: yup
+    .string()
+    .min(3, "Name Should be Minimum 3 Characters")
+    .required("Name is required"),
   address: yup.string().required("Address is required"),
   city: yup.string().required("City is required"),
   pincode: yup
