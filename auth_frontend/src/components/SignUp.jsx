@@ -7,16 +7,19 @@ import {
   Snackbar,
   Alert,
 } from "@mui/material";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { Navigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 
 import apiClient from "../services/api-client";
 
 const SignUp = () => {
-  const nameRef = useRef(null);
-  const emailRef = useRef(null);
-  const passwordRef = useRef(null);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [nameError, setNameError] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
   const [networkError, setNetworkError] = useState(false);
   const [checkDuplicateEmail, setCheckDupllicateEmail] = useState(false);
   const [checkSignUpSuccess, setCheckSignUpSuccess] = useState(false);
@@ -26,9 +29,9 @@ const SignUp = () => {
 
     apiClient
       .post("signup", {
-        name: nameRef.current.value,
-        email: emailRef.current.value,
-        password: passwordRef.current.value,
+        name: name,
+        email: email,
+        password: password,
       })
       .then((res) => {
         setCheckSignUpSuccess(true);
@@ -44,14 +47,26 @@ const SignUp = () => {
           setNetworkError(true);
         }
       });
-    nameRef.current.value = "";
-    emailRef.current.value = "";
-    passwordRef.current.value = "";
   }
 
   function emailErrorClose() {
     setCheckDupllicateEmail(false);
     setNetworkError(false);
+  }
+
+  function handleName(event) {
+    setNameError("");
+    setName(event.target.value);
+  }
+
+  function handleEmail(event) {
+    setEmailError("");
+    setEmail(event.target.value);
+  }
+
+  function handlePassword(event) {
+    setPasswordError("");
+    setPassword(event.target.value);
   }
 
   return (
@@ -90,38 +105,48 @@ const SignUp = () => {
           <Typography variant="h6" align="left" gutterBottom>
             Create Account
           </Typography>
-          <form
+          <Box
+            component="form"
             style={{ display: "flex", flexDirection: "column", rowGap: "25px" }}
-            onSubmit={formData}
           >
             <TextField
               required
-              inputRef={nameRef}
-              label="Name"
+              value={name}
+              onChange={handleName}
+              onFocus={() => setNameError("Name is required")}
+              label="name"
               variant="outlined"
-              type="text"
+              error={nameError ? true : false}
+              helperText={nameError}
             />
 
             <TextField
               required
-              inputRef={emailRef}
-              label="Email"
+              value={email}
+              onChange={handleEmail}
+              onFocus={() => setEmailError("Email is required")}
+              label="email@email.com"
               variant="outlined"
-              type="email"
+              error={emailError ? true : false}
+              helperText={emailError}
             />
             <TextField
               required
-              inputRef={passwordRef}
-              label="Password"
+              value={password}
+              onChange={handlePassword}
+              onFocus={() => setPasswordError("Password is required")}
+              label="password123"
               variant="outlined"
-              type="password"
+              error={passwordError ? true : false}
+              helperText={passwordError}
             />
 
             <Button
+              disabled={nameError || emailError || passwordError ? true : false}
               variant="contained"
               color="primary"
               sx={{ width: "30%" }}
-              type="submit"
+              onClick={formData}
             >
               SignUp
               {checkSignUpSuccess && <Navigate to={"/login"}></Navigate>}
@@ -130,7 +155,7 @@ const SignUp = () => {
             <Link to={"/login"}>
               <Typography>Account Exists? Login</Typography>
             </Link>
-          </form>
+          </Box>
         </Box>
       </Container>
     </>

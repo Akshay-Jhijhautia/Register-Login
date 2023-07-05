@@ -112,14 +112,14 @@ const Login = () => {
             <TextField
               required
               inputRef={emailRef}
-              label="Email"
+              label="email@email.com"
               variant="outlined"
               type="email"
             />
             <TextField
               required
               inputRef={passwordRef}
-              label="Password"
+              label="password123"
               variant="outlined"
               type="password"
             />
