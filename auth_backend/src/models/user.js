@@ -1,9 +1,10 @@
 "use strict";
 const { Model } = require("sequelize");
+
 const bcrypt = require("bcrypt");
 
 module.exports = (sequelize, DataTypes) => {
-  class Login extends Model {
+  class User extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -13,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   }
-  Login.init(
+  User.init(
     {
       name: {
         type: DataTypes.STRING,
@@ -35,14 +36,6 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: true,
       },
-      city: {
-        type: DataTypes.STRING,
-        allowNull: true,
-      },
-      pincode: {
-        type: DataTypes.STRING,
-        allowNull: true,
-      },
       phoneNumber: {
         type: DataTypes.STRING,
         allowNull: true,
@@ -51,19 +44,27 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: true,
       },
+      city: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      pincode: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
     },
     {
       sequelize,
-      modelName: "Login",
+      modelName: "User",
     }
   );
 
-  Login.beforeCreate(function encrypt(user) {
+  User.beforeCreate(function encrypt(user) {
     const encryptedPassword = bcrypt.hashSync(
       user.password,
       +process.env.SALT_ROUNDS
     );
     user.password = encryptedPassword;
   });
-  return Login;
+  return User;
 };
