@@ -11,7 +11,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/", user);
 
-app.get("/", (req, res) => {
+app.get("/check", (req, res) => {
   res.send("Healthy");
 });
 

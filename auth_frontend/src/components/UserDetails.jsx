@@ -74,14 +74,23 @@ const UserDetails = () => {
 
   function updateUserData() {
     apiClient
-      .patch(`update/${user.id}`, {
-        name: values.name,
-        gender: values.gender,
-        phoneNumber: values.phoneNumber,
-        address: values.address,
-        city: values.city,
-        pincode: values.pincode,
-      })
+      .patch(
+        `update/${user.id}`,
+        {
+          name: values.name === "" ? undefined : values.name,
+          gender: values.gender === "" ? undefined : values.gender,
+          phoneNumber:
+            values.phoneNumber === "" ? undefined : values.phoneNumber,
+          address: values.address === "" ? undefined : values.address,
+          city: values.city === "" ? undefined : values.city,
+          pincode: values.pincode === "" ? undefined : values.pincode,
+        },
+        {
+          headers: {
+            "x-access-token": isAuthenticated,
+          },
+        }
+      )
       .then((res) => {
         setSuccess(true);
         console.log(res.data);
@@ -223,6 +232,7 @@ const UserDetails = () => {
                 <TableRow
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
+                  {/* {Object.values(user).map((data))} */}
                   <TableCell component="th" scope="row">
                     {user.name}
                   </TableCell>
