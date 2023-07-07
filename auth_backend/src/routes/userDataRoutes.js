@@ -3,7 +3,8 @@ const router = express.Router();
 
 const { UserDataController } = require("../controller");
 
-router.get("/userData", UserDataController.getAllUserData);
+router.get("/", UserDataController.getAllUserData);
 router.post("/data", UserDataController.createUserData);
+router.get("/:id", UserDataController.getASingleUserData);
 
 module.exports = router;

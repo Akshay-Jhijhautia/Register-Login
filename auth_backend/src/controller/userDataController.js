@@ -14,6 +14,17 @@ async function getAllUserData(req, res) {
   }
 }
 
+async function getASingleUserData(req, res) {
+  try {
+    const response = await UserDataService.getSingleData(req.params.id);
+    SuccessResponse.data = response;
+    return res.status(StatusCodes.OK).json(SuccessResponse);
+  } catch (error) {
+    ErrorResponse.error = error;
+    return res.status(error.statusCode).json(ErrorResponse);
+  }
+}
+
 async function createUserData(req, res) {
   try {
     const response = await UserDataService.createUserData({
@@ -27,4 +38,4 @@ async function createUserData(req, res) {
   }
 }
 
-module.exports = { getAllUserData, createUserData };
+module.exports = { getAllUserData, createUserData, getASingleUserData };

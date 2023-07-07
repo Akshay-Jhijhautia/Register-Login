@@ -17,6 +17,19 @@ async function getAllData() {
   }
 }
 
+async function getSingleData(id) {
+  try {
+    const response = await userDataRepository.get(id);
+    return response;
+  } catch (error) {
+    if (error instanceof AppError) throw error;
+    throw new AppError(
+      "Cannot Get the data of the user",
+      StatusCodes.INTERNAL_SERVER_ERROR
+    );
+  }
+}
+
 async function createUserData(data) {
   try {
     const response = await userDataRepository.create(data);
@@ -29,4 +42,4 @@ async function createUserData(data) {
   }
 }
 
-module.exports = { getAllData, createUserData };
+module.exports = { getAllData, createUserData, getSingleData };

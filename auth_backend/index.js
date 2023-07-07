@@ -9,7 +9,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use("/user", user);
+app.use("/", user);
 
 app.get("/", (req, res) => {
   res.send("Healthy");

@@ -1,6 +1,6 @@
 const { StatusCodes } = require("http-status-codes");
 
-const { UserService } = require("../services");
+const { UserService, UserDataService } = require("../services");
 const { SuccessResponse, ErrorResponse } = require("../utils/common");
 
 async function getAllUsers(req, res) {
@@ -27,6 +27,21 @@ async function getASingleUserData(req, res) {
 
 async function updateDetails(req, res) {
   try {
+    const userData = await UserService.getSingleUser(req.user);
+    await UserDataService.createUserData({
+      user_details: {
+        name: userData.name,
+        email: userData.email,
+        fieldsUpdated: {
+          name: req.body.name === undefined ? "NO" : "YES",
+          address: req.body.address === undefined ? "NO" : "YES",
+          phoneNumber: req.body.phoneNumber === undefined ? "NO" : "YES",
+          gender: req.body.gender === undefined ? "NO" : "YES",
+          city: req.body.city === undefined ? "NO" : "YES",
+          pincode: req.body.pincode === undefined ? "NO" : "YES",
+        },
+      },
+    });
     const user = await UserService.updateName(req.params.id, {
       name: req.body.name,
       address: req.body.address,
