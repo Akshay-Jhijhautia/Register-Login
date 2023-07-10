@@ -110,83 +110,16 @@ const UserDetails = () => {
     setSuccess(false);
   }
 
-  async function handleNameChange(event) {
+  async function handleChange(field, value) {
     setValues({
       ...values,
-      name: event.target.value,
+      [field]: value,
     });
     try {
-      await userSchema.validateAt("name", { name: values.name });
-      setErrors({ ...errors, name: "" });
+      await signUpSchema.validateAt(field, { [field]: values[field] });
+      setErrors({ ...errors, [field]: "" });
     } catch (error) {
-      setErrors({ ...errors, name: error.message });
-    }
-  }
-
-  async function handleGenderChange(event) {
-    setValues({
-      ...values,
-      gender: event.target.value,
-    });
-    try {
-      await userSchema.validateAt("gender", { gender: values.gender });
-      setErrors({ ...errors, gender: "" });
-    } catch (error) {
-      setErrors({ ...errors, gender: error.message });
-    }
-  }
-
-  async function handlePhoneNumberChange(event) {
-    setValues({
-      ...values,
-      phoneNumber: event.target.value,
-    });
-    try {
-      await userSchema.validateAt("phoneNumber", {
-        phoneNumber: values.phoneNumber,
-      });
-      setErrors({ ...errors, phoneNumber: "" });
-    } catch (error) {
-      setErrors({ ...errors, phoneNumber: error.message });
-    }
-  }
-
-  async function handleAddressChange(event) {
-    setValues({
-      ...values,
-      address: event.target.value,
-    });
-    try {
-      await userSchema.validateAt("address", { address: values.address });
-      setErrors({ ...errors, address: "" });
-    } catch (error) {
-      setErrors({ ...errors, address: error.message });
-    }
-  }
-
-  async function handleCityChange(event) {
-    setValues({
-      ...values,
-      city: event.target.value,
-    });
-    try {
-      await userSchema.validateAt("city", { city: values.city });
-      setErrors({ ...errors, city: "" });
-    } catch (error) {
-      setErrors({ ...errors, city: error.message });
-    }
-  }
-
-  async function handlePinCodeChange(event) {
-    setValues({
-      ...values,
-      pincode: event.target.value,
-    });
-    try {
-      await userSchema.validateAt("pincode", { pincode: values.pincode });
-      setErrors({ ...errors, pincode: "" });
-    } catch (error) {
-      setErrors({ ...errors, pincode: error.message });
+      setErrors({ ...errors, [field]: error.message });
     }
   }
 
@@ -263,7 +196,7 @@ const UserDetails = () => {
             <TextField
               required
               value={values.name}
-              onChange={handleNameChange}
+              onChange={(event) => handleChange("name", event.target.value)}
               label="Name"
               variant="outlined"
               error={errors.name ? true : false}
@@ -274,7 +207,7 @@ const UserDetails = () => {
             <TextField
               required
               value={values.gender}
-              onChange={handleGenderChange}
+              onChange={(event) => handleChange("gender", event.target.value)}
               label="Gender"
               variant="outlined"
               error={errors.gender ? true : false}
@@ -284,7 +217,9 @@ const UserDetails = () => {
             <TextField
               required
               value={values.phoneNumber}
-              onChange={handlePhoneNumberChange}
+              onChange={(event) =>
+                handleChange("phoneNumber", event.target.value)
+              }
               label="Phone Number"
               variant="outlined"
               error={errors.phoneNumber ? true : false}
@@ -294,7 +229,7 @@ const UserDetails = () => {
             <TextField
               required
               value={values.address}
-              onChange={handleAddressChange}
+              onChange={(event) => handleChange("address", event.target.value)}
               label="Address"
               variant="outlined"
               error={errors.address ? true : false}
@@ -304,7 +239,7 @@ const UserDetails = () => {
             <TextField
               required
               value={values.city}
-              onChange={handleCityChange}
+              onChange={(event) => handleChange("city", event.target.value)}
               label="City"
               variant="outlined"
               error={errors.city ? true : false}
@@ -314,7 +249,7 @@ const UserDetails = () => {
             <TextField
               required
               value={values.pincode}
-              onChange={handlePinCodeChange}
+              onChange={(event) => handleChange("pincode", event.target.value)}
               label="Pin Code"
               variant="outlined"
               error={errors.pincode ? true : false}

@@ -59,42 +59,16 @@ const SignUp = () => {
     setNetworkError(false);
   }
 
-  async function handleNameChange(event) {
+  async function handleChange(field, value) {
     setValues({
       ...values,
-      name: event.target.value,
+      [field]: value,
     });
     try {
-      await signUpSchema.validateAt("name", { name: values.name });
-      setErrors({ ...errors, name: "" });
+      await signUpSchema.validateAt(field, { [field]: values[field] });
+      setErrors({ ...errors, [field]: "" });
     } catch (error) {
-      setErrors({ ...errors, name: error.message });
-    }
-  }
-
-  async function handleEmailChange(event) {
-    setValues({
-      ...values,
-      email: event.target.value,
-    });
-    try {
-      await signUpSchema.validateAt("email", { email: values.email });
-      setErrors({ ...errors, email: "" });
-    } catch (error) {
-      setErrors({ ...errors, email: error.message });
-    }
-  }
-
-  async function handlePasswordChange(event) {
-    setValues({
-      ...values,
-      password: event.target.value,
-    });
-    try {
-      await signUpSchema.validateAt("password", { password: values.password });
-      setErrors({ ...errors, password: "" });
-    } catch (error) {
-      setErrors({ ...errors, password: error.message });
+      setErrors({ ...errors, [field]: error.message });
     }
   }
 
@@ -141,7 +115,7 @@ const SignUp = () => {
             <TextField
               required
               value={values.name}
-              onChange={handleNameChange}
+              onChange={(event) => handleChange("name", event.target.value)}
               label="Name"
               variant="outlined"
               error={errors.name ? true : false}
@@ -152,7 +126,7 @@ const SignUp = () => {
             <TextField
               required
               value={values.email}
-              onChange={handleEmailChange}
+              onChange={(event) => handleChange("email", event.target.value)}
               label="Email"
               variant="outlined"
               error={errors.email ? true : false}
@@ -162,7 +136,7 @@ const SignUp = () => {
             <TextField
               required
               value={values.password}
-              onChange={handlePasswordChange}
+              onChange={(event) => handleChange("password", event.target.value)}
               label="Password"
               variant="outlined"
               error={errors.password ? true : false}

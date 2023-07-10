@@ -17,12 +17,10 @@ import { loginSchema } from "../Validations/validation";
 
 const Login = () => {
   const [values, setValues] = useState({
-    name: "",
     email: "",
     password: "",
   });
   const [errors, setErrors] = useState({
-    name: "",
     email: "",
     password: "",
   });
@@ -68,29 +66,16 @@ const Login = () => {
     setNetworkError(false);
   }
 
-  async function handleEmailChange(event) {
+  async function handleChange(field, value) {
     setValues({
       ...values,
-      email: event.target.value,
+      [field]: value,
     });
     try {
-      await loginSchema.validateAt("email", { email: values.email });
-      setErrors({ ...errors, email: "" });
+      await loginSchema.validateAt([field], { [field]: values[field] });
+      setErrors({ ...errors, [field]: "" });
     } catch (error) {
-      setErrors({ ...errors, email: error.message });
-    }
-  }
-
-  async function handlePasswordChange(event) {
-    setValues({
-      ...values,
-      password: event.target.value,
-    });
-    try {
-      await loginSchema.validateAt("password", { password: values.password });
-      setErrors({ ...errors, password: "" });
-    } catch (error) {
-      setErrors({ ...errors, password: error.message });
+      setErrors({ ...errors, [field]: error.message });
     }
   }
 
@@ -147,7 +132,7 @@ const Login = () => {
             <TextField
               required
               value={values.email}
-              onChange={handleEmailChange}
+              onChange={(event) => handleChange("email", event.target.value)}
               label="Email"
               variant="outlined"
               error={errors.email ? true : false}
@@ -157,7 +142,7 @@ const Login = () => {
             <TextField
               required
               value={values.password}
-              onChange={handlePasswordChange}
+              onChange={(event) => handleChange("password", event.target.value)}
               label="Password"
               variant="outlined"
               error={errors.password ? true : false}
