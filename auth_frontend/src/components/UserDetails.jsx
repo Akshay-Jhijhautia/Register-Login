@@ -116,7 +116,7 @@ const UserDetails = () => {
       [field]: value,
     });
     try {
-      await signUpSchema.validateAt(field, { [field]: values[field] });
+      await userSchema.validateAt(field, { [field]: values[field] });
       setErrors({ ...errors, [field]: "" });
     } catch (error) {
       setErrors({ ...errors, [field]: error.message });
